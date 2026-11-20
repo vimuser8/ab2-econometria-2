@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pandas as pd
 import json
 from pathlib import Path
@@ -8,11 +9,30 @@ from core import data
 
 defi_df = data.load_data()
 cols = defi_df.columns
-#for c in cols:
-#    print(c)
+for i, c in enumerate(cols):
+    print(f"{i:>2}: {c}")
 
-scam_names = defi_df["scam_type.name"].unique()
-scam_types = defi_df["scam_type.type"].unique()
+
+def get_unique(df, col):
+    out  = df[col].unique()
+    return out
+
+
+cols = [
+    "technical_issue",
+    "funds_lost",
+    "funds_returned",
+    "funds_recovered",
+    "is_verified_source_code",
+    "is_public_team",
+    "scam_type.name",
+    "scam_type.type"
+]
+for c in cols:
+    out = get_unique(defi_df, c)
+    print(f"{c:>2}: {out}")
+    print("")
+
 
 losses = defi_df["funds_lost"]
 desc = losses.describe()

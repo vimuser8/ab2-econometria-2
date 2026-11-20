@@ -1,0 +1,4 @@
+Define what "DeFi" is as well as the database we're working with.
+
+is_verified_source and is_public_team are good binary variables for
+predicting the success of a scam (proxy measured in dollars)
