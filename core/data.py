@@ -94,17 +94,38 @@ def load_data(src_path: str | Path = DEFI_FILE):
     defi = pd.json_normalize(data, sep=".")
 
     # Handling the data
-    variables = ["funds_lost", "is_verified_source_code", "is_public_team", "explt", "rug", "scam_type.type"]  # scam name to be considered
+    variables = ["funds_lost", "explt", "rug"]
     #variables = ["exit", "incog", "sus_src"]
 
-    # Data-type conversion
-    defi = defi[defi["scam_type.type"].ne("Other")]
+    # Data-type conversion  Becomes process_data()
+    defi = defi[~defi["name_categories"].str.startswith("CeFi")]
 
     defi["funds_lost"] = defi["funds_lost"].astype(float)
     defi["is_verified_source_code"] = defi["is_verified_source_code"].astype(float)
     defi["is_public_team"] = defi["is_public_team"].astype(float)
     defi["explt"] = defi["scam_type.name"].str.startswith("Exploit").astype(float)
     defi["rug"] = defi["scam_type.type"].str.endswith("Rugpull").astype(float)
+
+    defi["token"] = (defi["name_categories"].str.lower()=="token").astype(float)
+    defi["nontoken"] = 1 - defi["token"]
+
+    # NEW
+    CONTRACT = ("rugpull", "honeypot")
+    TECHNICAL = ("access control", "flash loan attack", "oracle issue", "reentrancy")
+    IMITATION = ("phishing",)
+    MARKET = ("abandoned",)
+
+    sub = defi["scam_type.type"].str.lower().str.strip()
+
+    mapping = {
+        **dict.fromkeys(CONTRACT, "contract"),
+        **dict.fromkeys(TECHNICAL, "technical"),
+        **dict.fromkeys(IMITATION, "imitation"),
+        **dict.fromkeys(MARKET, "market")
+    }
+
+    defi["strategy"] = sub.map(mapping)
+    defi["tech"] = (defi["strategy"]=="technical").astype(float)
 
     before_rows = defi.shape[0]
     defi = defi.dropna(subset=variables)
@@ -113,8 +134,6 @@ def load_data(src_path: str | Path = DEFI_FILE):
 
     # TODO check if all bool variables are actually reliable
     # Made post formatting (what is a better way?)
-    defi["incog"] = (defi["is_public_team"]==0) # .astype(float)
-    defi["sus_src"] = (defi["is_verified_source_code"]==0) #.astype(float)
     defi["losses"] = np.log(defi["funds_lost"].astype(float))
 
     logger.info("Usable rows after dropping NAs: %d (from %d)", len(defi), before_rows)
@@ -125,4 +144,8 @@ if __name__=="__main__":
     df = load_data()
     num_rows = df.shape[0]
     logger.info(num_rows)  # Should 100 times pages
+
+    logger.info(df["strategy"].value_counts(dropna=False))
+    logger.info(df["tech"].value_counts(dropna=False))
+    logger.info(df["token"].value_counts(dropna=False))
 

@@ -18,16 +18,20 @@ logger = logging.getLogger(__name__)
 
 if __name__=="__main__":
     defi = data.load_data()
-    dummy_vars = ["sus_src", "incog", "explt", "rug"]
+    dummy_vars = ["sus_src", "incog", "explt", "rug", "tech", "public", "nontoken"]
     target_var = ["losses"]
     required_vars = target_var + dummy_vars
 
     X = pd.DataFrame(
         {
-            "rug": defi["rug"] ,
+            #"rug": defi["rug"],
+            #"tech": defi["tech"],
             #"sus_src": defi["sus_src"],
+            #"public": defi["public"],
+            #"token": defi["token"],
+            #"nontoken": defi["nontoken"],
             #"incog": defi["incog"],
-            #"explt": defi["exit"],
+            "explt": defi["explt"],
             # some combination?
         },
         index=defi.index,

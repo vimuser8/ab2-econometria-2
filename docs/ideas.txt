@@ -2,3 +2,8 @@ Define what "DeFi" is as well as the database we're working with.
 
 is_verified_source and is_public_team are good binary variables for
 predicting the success of a scam (proxy measured in dollars)
+
+[2026-11-20]: got ~19% for R as my latest feat, will give "name_categories" and protocol size a shot
+It's worth verifying if 70% loss in rows is optimal.
+
+read lecture slideshow for a guide
