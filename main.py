@@ -17,28 +17,24 @@ def get_unique(df, col):
     out  = df[col].unique()
     return out
 
+for c in defi.columns:
+    print(f"{c:>2} {defi[c].isna().sum()}")
 
-cols = [
-    "technical_issue",
-    "is_verified_source_code",
-    "is_public_team",
-    "scam_type.name",
-    "scam_type.type",
-    "name_categories"
-]
-
-grouped = defi.groupby("name_categories")["funds_lost"].sum()
+#grouped = defi.groupby("name_categories")["funds_lost"].sum()
 #for x, y in grouped.items():
 #    print(x, f"{y:,}")
 #print(x)
 
-for c in cols:
-    out = get_unique(defi, c)
-    print(f"{c:>2}: {out}")
-    print("")
+#for c in cols:
+#    out = get_unique(defi, c)
+#    print(f"{c:>2}: {out}")
+#    print("")
 
 
-#losses = defi_df["funds_lost"]
+#losses = defi["funds_lost"]
+#filtered = defi[defi["funds_lost"].isna()]
+#print(filtered.shape)
+
 #desc = losses.describe()
 #
 #for stat, val in desc.items():
@@ -48,7 +44,7 @@ for c in cols:
 #desc = [f"{d:,}" for d in desc]
 
 #print(df.columns)
-#years = df["date"].str[:4]
+#years = defi["date"].str[:4]
 #print(years.value_counts(dropna=False).sort_index())
 
 #for d in sorted(devs):

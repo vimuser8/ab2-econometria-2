@@ -18,21 +18,22 @@ logger = logging.getLogger(__name__)
 
 if __name__=="__main__":
     defi = data.load_data()
-    dummy_vars = ["sus_src", "incog", "explt", "rug", "tech", "public", "nontoken"]
-    target_var = ["losses"]
-    required_vars = target_var + dummy_vars
+    year_cols = [c for c in defi.columns if c.startswith("y_")]
+    print(year_cols)
 
     X = pd.DataFrame(
         {
-            #"rug": defi["rug"],
+            "exploit": defi["exploit"],
+            "sus_src": defi["sus_src"],
+            "y_2021": defi["y_2021"],
+            "y_2022": defi["y_2022"],
+            "y_2023": defi["y_2023"],
+            "y_2024": defi["y_2024"],
+            "y_2025": defi["y_2025"],
+            "y_2026": defi["y_2026"],
+            #"is_public_team": defi["is_public_team"],
+            #"cefi": defi["cefi"],
             #"tech": defi["tech"],
-            #"sus_src": defi["sus_src"],
-            #"public": defi["public"],
-            #"token": defi["token"],
-            #"nontoken": defi["nontoken"],
-            #"incog": defi["incog"],
-            "explt": defi["explt"],
-            # some combination?
         },
         index=defi.index,
     )
